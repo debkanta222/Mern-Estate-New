@@ -1,10 +1,12 @@
 import React from "react";
-import Navbar from "../components/navbar";
+import "../../src/styles/home.css";
 
 export default function Home() {
   return (
     <>
-      <h1 className="ta-center">Home</h1>
+      <div className="max-width">
+        <h1 className="text-center text-3xl py-5">Home</h1>
+      </div>
     </>
   );
 }
