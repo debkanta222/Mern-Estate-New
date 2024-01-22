@@ -1,25 +1,34 @@
 import React from "react";
 import "../../src/styles/profile.css";
+import {
+  IconPlaylistAdd,
+  IconList,
+  IconTrash,
+  IconPower,
+} from "@tabler/icons-react";
+import { useRef } from "react";
 
 export default function Profile() {
+  const inputRef = useRef(null);
   return (
     <>
-      <div className="container mx-auto my-60 max-w-4xl">
+      <div className="container mx-auto my-60 max-w-8xl">
         <div>
-          <div className="bg-white relative shadow rounded-lg w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto">
+          <div className="bg-white relative shadow-xl rounded-lg w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto">
             <div className="flex justify-center">
+              <input type="file" ref={inputRef} hidden />
               <img
-                src="https://avatars0.githubusercontent.com/u/35900628?v=4"
-                alt=""
-                className="rounded-full mx-auto absolute -top-20 w-32 h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110"
+                src="https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg"
+                onClick={() => inputRef.current.click()}
+                alt="profile avatar"
+                className="rounded-full cursor-pointer mx-auto absolute -top-20 w-32 h-32 shadow-md border-4 border-white transition duration-300 transform hover:scale-125"
               />
             </div>
-
-            <div className="mt-16 text-center">
-              <h1 className="font-bold text-center text-3xl text-gray-900">
+            <div className="mt-16">
+              <h1 className="font-bold text-3xl text-gray-900 text-center">
                 Welcome ! Ankan Jha
               </h1>
-              <div className="my-5 px-6">
+              <div className="my-5 px-8">
                 <a
                   href="#"
                   className="text-gray-200 block rounded-lg text-center font-medium leading-6 px-6 py-3 bg-gray-900 hover:bg-black hover:text-white"
@@ -28,32 +37,23 @@ export default function Profile() {
                 </a>
               </div>
 
-              <div className="text-center pb-8 px-6 max-w-xs mx-auto">
-                <button
-                  type="button"
-                  class="w-full text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-                >
+              <div className="flex flex-col pb-8 px-8 justify-start">
+                <a className="cursor-pointer flex font-semibold items-center text-cyan-600 transition duration-300 transform hover:scale-110">
+                  <IconPlaylistAdd className="mr-2 text-cyan-600" size={30} />
                   Create Listing
-                </button>
-                <button
-                  type="button"
-                  class="text-white w-full bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-                >
+                </a>
+                <a className="cursor-pointer flex font-semibold items-center text-cyan-600 mt-2 transition duration-300 transform hover:scale-110">
+                  <IconList className="mr-2 text-cyan-600" size={30} />
                   Show Listing
-                </button>
-                <button
-                  type="button"
-                  class="text-white w-full bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-                >
+                </a>
+                <a className="cursor-pointer flex font-semibold items-center text-red-600 mt-2 transition duration-300 transform hover:scale-110">
+                  <IconTrash className="mr-2 text-red-600" size={30} />
                   Delete Account
-                </button>
-
-                <button
-                  type="button"
-                  class="text-white w-full bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-                >
-                  Log Out
-                </button>
+                </a>
+                <a className="cursor-pointer flex font-semibold items-center text-red-600 mt-2 transition duration-300 transform hover:scale-110">
+                  <IconPower className="mr-2 text-red-600" size={30} />
+                  Log out
+                </a>
               </div>
             </div>
           </div>
