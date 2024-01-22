@@ -28,7 +28,7 @@ export default function Profile() {
               <h1 className="font-bold text-3xl text-gray-900 text-center">
                 Welcome ! Ankan Jha
               </h1>
-              <div className="my-5 px-8">
+              <div className="my-5 px-14">
                 <a
                   href="#"
                   className="text-gray-200 block rounded-lg text-center font-medium leading-6 px-6 py-3 bg-gray-900 hover:bg-black hover:text-white"
@@ -37,7 +37,7 @@ export default function Profile() {
                 </a>
               </div>
 
-              <div className="flex flex-col pb-8 px-8 justify-start">
+              <div className="flex flex-col pb-8 px-14 justify-start">
                 <a className="cursor-pointer flex font-semibold items-center text-cyan-600 transition duration-300 transform hover:scale-110">
                   <IconPlaylistAdd className="mr-2 text-cyan-600" size={30} />
                   Create Listing
