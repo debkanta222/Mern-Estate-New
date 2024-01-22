@@ -31,7 +31,7 @@ export default function Profile() {
               <div className="my-5 px-14">
                 <a
                   href="#"
-                  className="text-gray-200 block rounded-lg text-center font-medium leading-6 px-6 py-3 bg-gray-900 hover:bg-black hover:text-white"
+                  className="text-gray-200 block rounded-lg text-center font-medium leading-6 px-6 py-3 bg-gray-900 hover:bg-black hover:text-white transition duration-300 transform hover:scale-110"
                 >
                   Edit Profile
                 </a>
