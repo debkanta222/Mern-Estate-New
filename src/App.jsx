@@ -6,6 +6,7 @@ import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import CreateListing from "./pages/CreateListing";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
+        <Route path="/create-listing" element={<CreateListing />}></Route>
       </Routes>
       <Footer />
     </BrowserRouter>

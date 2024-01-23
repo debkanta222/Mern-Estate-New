@@ -3,3 +3,11 @@
   background-size: cover;
   background-repeat: no-repeat !important;
 }
+.icon-color {
+  color: #3d3d3d;
+}
+
+.image-uploader:hover svg {
+  opacity: 1;
+  transition: 0.6s;
+}
