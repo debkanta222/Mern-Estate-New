@@ -2,16 +2,36 @@ import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "react-spring";
 import "../../src/styles/login.css";
 import { Link } from "react-router-dom";
-import { IconBrandGoogleFilled } from "@tabler/icons-react";
+import {
+  IconBrandGoogleFilled,
+  IconEye,
+  IconEyeOff,
+} from "@tabler/icons-react"; // Assuming you have eye icons available
 
 export default function Login() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [showAnimation, setShowAnimation] = useState(false);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [passwordVisible, setPasswordVisible] = useState(false); // State to manage password visibility
+  const placeholders = [
+    "name@company.com",
+    "john.doe@example.com",
+    "user@example.com",
+  ];
 
   useEffect(() => {
     setShowAnimation(true);
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prevIndex) => (prevIndex + 1) % placeholders.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [placeholders.length]);
 
   const fadeIn = useSpring({
     opacity: showAnimation ? 1 : 0,
@@ -29,6 +49,14 @@ export default function Login() {
     const isValidEmail = validateEmail(newEmail);
     setEmail(newEmail);
     setIsEmailValid(isValidEmail);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
   };
 
   return (
@@ -52,7 +80,7 @@ export default function Login() {
               <form className="space-y-4 md:space-y-6" action="#">
                 <div>
                   <label
-                    for="email"
+                    htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Your email
@@ -64,7 +92,7 @@ export default function Login() {
                     name="email"
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
+                    placeholder={placeholders[placeholderIndex]}
                     required=""
                   />
                   {!isEmailValid && (
@@ -75,19 +103,34 @@ export default function Login() {
                 </div>
                 <div>
                   <label
-                    for="password"
+                    htmlFor="password"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Password
                   </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                  />
+                  <div className="relative">
+                    <input
+                      type={passwordVisible ? "text" : "password"}
+                      value={password}
+                      onChange={handlePasswordChange}
+                      name="password"
+                      id="password"
+                      placeholder="••••••••"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required=""
+                    />
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-700 dark:text-gray-400 focus:outline-none"
+                    >
+                      {passwordVisible ? (
+                        <IconEyeOff color="rgb(73, 80, 87)" strokeWidth={1.2} />
+                      ) : (
+                        <IconEye color="rgb(73, 80, 87)" strokeWidth={1.2} />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-start">
@@ -102,7 +145,7 @@ export default function Login() {
                     </div>
                     <div className="ml-3 text-sm">
                       <label
-                        for="remember"
+                        htmlFor="remember"
                         className="text-gray-500 dark:text-gray-300"
                       >
                         Remember me
@@ -120,7 +163,7 @@ export default function Login() {
                   type="submit"
                   className="w-full flex items-center justify-center text-white bg-red-800  hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 button-margin"
                 >
-                  <IconBrandGoogleFilled className="mr-2" />
+                  <IconBrandGoogleFilled className="mr-2" size={20}/>
                   Continue with Google
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">

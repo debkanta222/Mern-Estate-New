@@ -2,11 +2,70 @@ import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "react-spring";
 import "../../src/styles/register.css";
 import { Link } from "react-router-dom";
-import { IconBrandGoogleFilled } from "@tabler/icons-react";
+import {
+  IconBrandGoogleFilled,
+  IconEye,
+  IconEyeOff,
+  IconX,
+} from "@tabler/icons-react"; // Import eye icons
+
+// Modal component for displaying suggested password
+const SuggestedPasswordModal = ({
+  suggestedPassword,
+  onClose,
+  onUsePassword,
+}) => {
+  const fadeIn = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  });
+
+  return (
+    <animated.div
+      style={fadeIn}
+      className="fixed inset-0 flex items-center justify-center z-50"
+    >
+      <div
+        className="absolute inset-0 bg-gray-900 opacity-75"
+        onClick={onClose}
+      ></div>
+      <div className="bg-white rounded-lg w-80 p-8 z-50 relative">
+        <button
+          className="absolute top-0 right-0 p-2 cursor-pointer"
+          onClick={onClose}
+        >
+          <IconX
+            className="hover:text-red-800 hover:scale-125 hover:stroke-2"
+            size={20}
+            strokeWidth={1}
+          />
+        </button>
+        <p className="text-lg font-semibold mb-4 text-center">
+          Suggested Password
+        </p>
+        <p className="text-sm mr-2 text-center pt-2 pb-4">
+          {suggestedPassword}
+        </p>
+        <div className="text-center">
+          <button
+            type="button"
+            onClick={() => onUsePassword(suggestedPassword)}
+            className="relative inline-flex items-center justify-center p-0.5 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800"
+          >
+            <span className="relative px-5 py-1.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-3xl group-hover:bg-opacity-0">
+              Use this password
+            </span>
+          </button>
+        </div>
+      </div>
+    </animated.div>
+  );
+};
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // State to track password visibility
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [username, setUsername] = useState("");
@@ -14,6 +73,7 @@ export default function Register() {
   const [showAnimation, setShowAnimation] = useState(false);
   const [suggestedPassword, setSuggestedPassword] = useState("");
   const [isPasswordTyped, setIsPasswordTyped] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setShowAnimation(true);
@@ -77,9 +137,21 @@ export default function Register() {
 
   const handleSuggestPassword = () => {
     const suggestedPassword = generateRandomPassword();
-    setPassword(suggestedPassword);
-    setIsPasswordValid(true); // Assuming suggested password is always valid
     setSuggestedPassword(suggestedPassword);
+    setShowModal(true);
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prev) => !prev);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const useSuggestedPassword = (password) => {
+    setPassword(password);
+    setShowModal(false);
   };
 
   return (
@@ -103,7 +175,7 @@ export default function Register() {
               <form className="space-y-4 md:space-y-6" action="#">
                 <div>
                   <label
-                    for="username"
+                    htmlFor="username"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Full Name
@@ -126,7 +198,7 @@ export default function Register() {
                 </div>
                 <div>
                   <label
-                    for="email"
+                    htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Email
@@ -155,50 +227,63 @@ export default function Register() {
                     Password
                   </label>
                   <div className="flex items-center">
-                    <input
-                      value={password}
-                      onChange={handlePasswordChange}
-                      type="password"
-                      name="password"
-                      id="password"
-                      placeholder="••••••••"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required=""
-                    />
+                    <div className="relative w-full">
+                      <input
+                        value={password}
+                        onChange={handlePasswordChange}
+                        type={isPasswordVisible ? "text" : "password"} // Toggle password visibility
+                        name="password"
+                        id="password"
+                        placeholder="••••••••"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required=""
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute inset-y-0 right-0 flex items-center mr-3 focus:outline-none"
+                      >
+                        {isPasswordVisible ? (
+                          <IconEyeOff
+                            color="rgb(73, 80, 87)"
+                            strokeWidth={1.2}
+                          />
+                        ) : (
+                          <IconEye color="rgb(73, 80, 87)" strokeWidth={1.2} />
+                        )}
+                      </button>
+                    </div>
                   </div>
                   {!isPasswordValid && (
-                    <p className="font-semibold text-red-500">
+                    <p className="font-semibold text-red-500 pb-5">
                       Please enter a valid Password
                     </p>
                   )}
-                  {suggestedPassword && (
-                    <p className="my-3 text-sm font-light text-gray-500 dark:text-gray-400">
-                      Suggested password:{" "}
-                      <span className="font-semibold">{suggestedPassword}</span>
-                    </p>
-                  )}
-
                   {isPasswordTyped && (
                     <button
                       type="button"
                       onClick={handleSuggestPassword}
-                      class="py-2.5 px-5 me-2 mb-2 text-sm text-center mt-3 font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                      className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800"
                     >
-                      Suggest strong password
+                      <span className="relative px-5 py-1.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-3xl group-hover:bg-opacity-0">
+                        Suggest strong password
+                      </span>
                     </button>
                   )}
                 </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-gray-800  hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Register
-                </button>
+                <div className="pt-3">
+                  <button
+                    type="submit"
+                    className="w-full text-white bg-gray-800  hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  >
+                    Register
+                  </button>
+                </div>
                 <button
                   type="submit"
                   className="w-full flex items-center justify-center text-white bg-red-800  hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 button-margin"
                 >
-                  <IconBrandGoogleFilled className="mr-2" />
+                  <IconBrandGoogleFilled className="mr-2" size={20} />
                   Continue with Google
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
@@ -215,6 +300,13 @@ export default function Register() {
           </animated.div>
         </div>
       </section>
+      {showModal && (
+        <SuggestedPasswordModal
+          suggestedPassword={suggestedPassword}
+          onClose={closeModal}
+          onUsePassword={useSuggestedPassword}
+        />
+      )}
     </>
   );
 }
