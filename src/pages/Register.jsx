@@ -124,20 +124,39 @@ export default function Register() {
   };
 
   const generateRandomPassword = () => {
-    const length = 12; // You can adjust the length of the suggested password
-    const charset =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@$!%*?&";
+    const length = 10;
+    const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+    const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const specialChars = "@$!%*?&";
+    const numbers = "0123456789";
+
+    const getRandomChar = (charset) =>
+      charset[Math.floor(Math.random() * charset.length)];
+
     let password = "";
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset[randomIndex];
+    password += getRandomChar(uppercaseChars);
+    password += getRandomChar(lowercaseChars);
+    password += getRandomChar(specialChars);
+    password += getRandomChar(numbers);
+    for (let i = 4; i < length; i++) {
+      const randomCharset =
+        lowercaseChars + uppercaseChars + specialChars + numbers;
+      password += getRandomChar(randomCharset);
     }
+
+    // Shuffle the password characters
+    password = password
+      .split("")
+      .sort(() => 0.5 - Math.random())
+      .join("");
+
     return password;
   };
 
   const handleSuggestPassword = () => {
     const suggestedPassword = generateRandomPassword();
     setSuggestedPassword(suggestedPassword);
+    setIsPasswordValid(true); // Reset password validation
     setShowModal(true);
   };
 
@@ -151,6 +170,7 @@ export default function Register() {
 
   const useSuggestedPassword = (password) => {
     setPassword(password);
+    setIsPasswordValid(true); // Reset password validation
     setShowModal(false);
   };
 
@@ -255,7 +275,7 @@ export default function Register() {
                     </div>
                   </div>
                   {!isPasswordValid && (
-                    <p className="font-semibold text-red-500 pb-5">
+                    <p className="font-semibold text-red-500">
                       Please enter a valid Password
                     </p>
                   )}
@@ -263,7 +283,7 @@ export default function Register() {
                     <button
                       type="button"
                       onClick={handleSuggestPassword}
-                      className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800"
+                      className="relative inline-flex mt-7 items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800"
                     >
                       <span className="relative px-5 py-1.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-3xl group-hover:bg-opacity-0">
                         Suggest strong password
